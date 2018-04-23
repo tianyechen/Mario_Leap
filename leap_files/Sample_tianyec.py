@@ -15,6 +15,10 @@ import Leap, thread, time
 
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 from MarioTimer import MarioTimer
+import os
+import stat
+import errno
+import posix
 
 
 class SampleListener(Leap.Listener):
@@ -25,17 +29,35 @@ class SampleListener(Leap.Listener):
     is_jumping = False
     run_timer = None
     jump_timer = None
+    pipeName = "/tmp/testpipe"
+    fifo = open(pipeName, 'w')
+
+    ##value needs to be a string
+    def write_to_pipe(self, value):
+        self.fifo.write(value)
+        self.fifo.write('\n')
+        self.fifo.flush()
+        print "wrote %s to pipe" %(value)
+
     def stop_mario(self):
         print "stop"
         self.is_running = False
+        self.write_to_pipe('s')
 
     def stop_jump(self):
         print "stop"
         # print "pipe two ss"
         self.is_jumping = False
+        self.write_to_pipe('s')
+        # self.write_to_pipe('s')
+
 
     def on_init(self, controller):
         print "Initialized"
+        try:
+            os.mkfifo(pipeName)
+        except:
+            pass
 
     def on_connect(self, controller):
         print "Connected"
@@ -51,6 +73,7 @@ class SampleListener(Leap.Listener):
         print "Disconnected"
 
     def on_exit(self, controller):
+        self.fifo.close
         print "Exited"
 
     def on_frame(self, controller):
@@ -79,8 +102,9 @@ class SampleListener(Leap.Listener):
                 if not self.is_jumping:
                     print "jump"
                     self.is_jumping = True
-                    self.jump_timer = MarioTimer(3, self.stop_jump)
+                    self.jump_timer = MarioTimer(.01, self.stop_jump)
                     self.jump_timer.start()
+                    self.write_to_pipe('b')
                 else:
                     self.jump_timer.reset()
                 swipe = SwipeGesture(gesture)
@@ -92,9 +116,14 @@ class SampleListener(Leap.Listener):
 
             if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
                 if not self.is_running:
-                    print "run right"
+                    if handType == "Right hand":
+                        print "run right"
+                        self.write_to_pipe('d')
+                    else:
+                        print "run_left"
+                        self.write_to_pipe('a')
                     self.is_running = True
-                    self.run_timer = MarioTimer(3, self.stop_mario)
+                    self.run_timer = MarioTimer(.01, self.stop_mario)
                     self.run_timer.start()
                 else:
                     self.run_timer.reset()
