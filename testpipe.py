@@ -9,17 +9,16 @@ try:
     os.mkfifo(pipeName)
 except:
     pass
-#
-#
-# try:
-#     w = os.open(pipeName, os.O_WRONLY)
-#     print(w)
-# except OSError as ex:
-#     print ("fuck ")
-#     if ex.errno == errno.ENXIO:
-#         pass
-#
-################3
+
+
+##using manual open and close
+# fifo = open(pipeName, 'w')
+# fifo.write("enter")
+# fifo.write('\n')
+# fifo.flush()
+# fifo.close
+
+##using with to open and close the file
 with open(pipeName, 'w' ) as fifo:
     print("Igothere")
     while True:
