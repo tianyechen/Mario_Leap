@@ -4,6 +4,12 @@
 #include "CFG.h"
 #include "Text.h"
 #include "SDL_mixer.h"
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 /* ******************************************** */
 
@@ -23,6 +29,16 @@ bool CCore::keyD = false;
 bool CCore::keyShift = false;
 bool CCore::keyAPressed = false;
 bool CCore::keyDPressed = false;
+
+//pipe//
+int fd;
+
+//gestures//
+bool gestureDown = false;
+bool gestureUp=false;
+bool useKeys = true;
+int gestureKey;
+int keyPress;
 
 CCore::CCore(void) {
 	this->quitGame = false;
@@ -73,6 +89,7 @@ CCore::CCore(void) {
 
     //open test pipe
     fd = open("/tmp/testpipe", O_RDONLY|O_NONBLOCK);
+    // printf("gothere\n", );
 }
 
 CCore::~CCore(void) {
@@ -80,14 +97,63 @@ CCore::~CCore(void) {
 	delete mainEvent;
 	SDL_DestroyRenderer(rR);
 	SDL_DestroyWindow(window);
+    close(fd);
 }
 
 /* ******************************************** */
 
 void CCore::mainLoop() {
+    // printf("fuckf\n", );
 	lFPSTime = SDL_GetTicks();
 
 	while(!quitGame && mainEvent->type != SDL_QUIT) {
+        // printf("ugh\n", );
+        char line[128] = {0};
+        if (read(fd, line, sizeof(line)) > 0){
+            if (useKeys){
+                useKeys = false;
+            }
+            printf("%s", line);
+            if (strcmp(line, "s\n")== 0){
+                gestureUp = true;
+                printf("recognized gesture stop\n");
+            }
+            else{
+                gestureDown = true;
+                if (strcmp(line, "enter\n") == 0){
+                    gestureKey = SDLK_RETURN;
+                    printf("recognized enter\n");
+                }
+                else if (strcmp(line, "up\n") == 0){
+                    gestureKey = SDLK_UP;
+                    printf("recognized up\n");
+                }
+                else if (strcmp(line, "down\n")== 0){
+                    gestureKey = SDLK_DOWN;
+                    printf("recognized down\n");
+                }
+                else if (strcmp(line, "right\n")== 0){
+                    gestureKey = SDLK_RIGHT;
+                    printf("recognized right\n");
+                }
+                else if (strcmp(line, "left\n")== 0){
+                    gestureKey = SDLK_LEFT;
+                    printf("recognized left\n");
+                }
+                else if (strcmp(line, "a\n") == 0){
+                    gestureKey = SDLK_a;
+                    printf("recognized a\n");
+                }
+                else if (strcmp(line, "d\n") == 0){
+                    gestureKey = SDLK_d;
+                    printf("recognized d\n");
+                }
+                else if (strcmp(line, "b\n") == 0){
+                    gestureKey = SDLK_b;
+                    printf("recognized jump\n");
+                }
+            }
+        }
 		frameTime = SDL_GetTicks();
 		SDL_PollEvent(mainEvent);
 		SDL_RenderClear(rR);
@@ -134,10 +200,22 @@ void CCore::Input() {
 }
 
 void CCore::InputMenu() {
-	if(mainEvent->type == SDL_KEYDOWN) {
-		CCFG::getMM()->setKey(mainEvent->key.keysym.sym);
+    if (gestureDown){
+        keyPress = gestureKey;
+        printf("happened\n");
+    }
+    else{
+        keyPress = mainEvent -> key.keysym.sym;
+    }
+    // printf("%d\n", gestureDown);
+	if((mainEvent->type == SDL_KEYDOWN)|gestureDown) {
+        if (gestureDown){
+            gestureDown = false;
+            gestureUp = true;
+        }
+		CCFG::getMM()->setKey(keyPress);
 
-		switch(mainEvent->key.keysym.sym) {
+		switch(keyPress) {
 			case SDLK_s: case SDLK_DOWN:
 				if(!keyMenuPressed) {
 					CCFG::getMM()->keyPressed(2);
@@ -151,6 +229,7 @@ void CCore::InputMenu() {
 				}
 				break;
 			case SDLK_KP_ENTER: case SDLK_RETURN:
+                printf("executed enter\n");
 				if(!keyMenuPressed) {
 					CCFG::getMM()->enter();
 					keyMenuPressed = true;
@@ -177,8 +256,17 @@ void CCore::InputMenu() {
 		}
 	}
 
-	if(mainEvent->type == SDL_KEYUP) {
-		switch(mainEvent->key.keysym.sym) {
+    // bool keyUpSwich;
+    // if (useKeys){
+    //     keyUpSwich = (mainEvent->type == SDL_KEYUP);
+    // }
+    // else{
+    //     keyUpSwich = (mainEvent->type == SDL_KEYUP)||gestureDown == false;
+    // }
+
+	if((mainEvent->type == SDL_KEYUP)|gestureUp) {
+        gestureUp = false;
+		switch(keyPress) {
 			case SDLK_s: case SDLK_DOWN: case SDLK_w: case SDLK_UP: case SDLK_KP_ENTER: case SDLK_RETURN: case SDLK_ESCAPE: case SDLK_a: case SDLK_RIGHT: case SDLK_LEFT: case SDLK_d:
 				keyMenuPressed = false;
 				break;
@@ -192,10 +280,10 @@ void CCore::InputPlayer() {
 	if(mainEvent->type == SDL_WINDOWEVENT) {
 		switch(mainEvent->window.event) {
 			case SDL_WINDOWEVENT_FOCUS_LOST:
-				CCFG::getMM()->resetActiveOptionID(CCFG::getMM()->ePasue);
-				CCFG::getMM()->setViewID(CCFG::getMM()->ePasue);
-				CCFG::getMusic()->PlayChunk(CCFG::getMusic()->cPASUE);
-				CCFG::getMusic()->PauseMusic();
+				// // CCFG::getMM()->resetActiveOptionID(CCFG::getMM()->ePasue);
+				// // CCFG::getMM()->setViewID(CCFG::getMM()->ePasue);
+				// CCFG::getMusic()->PlayChunk(CCFG::getMusic()->cPASUE);
+				// CCFG::getMusic()->PauseMusic();
 				break;
 		}
 	}
