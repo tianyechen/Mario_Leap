@@ -1,7 +1,7 @@
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/install.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/list_install_components.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/rebuild_cache.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/uMario.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/install/local.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/install/strip.dir
-/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/CMakeFiles/edit_cache.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/install.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/list_install_components.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/rebuild_cache.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/uMario.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/install/local.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/install/strip.dir
+/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/CMakeFiles/edit_cache.dir

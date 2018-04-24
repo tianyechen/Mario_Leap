@@ -61,7 +61,7 @@ std::string CCFG::getKeyString(int keyID) {
 	switch(keyID) {
 		case SDLK_ESCAPE:
 			return "ESCAPE";
-		case SDLK_b:
+		case SDLK_SPACE:
 			return "SPACE";
 		case SDLK_LSHIFT:
 			return "LSHIFT";

@@ -1,4 +1,4 @@
-# Install script for directory: /home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski
+# Install script for directory: /home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,25 +33,25 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  if(EXISTS "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario")
+  if(EXISTS "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario"
+         FILE "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario"
          RPATH "")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario")
+   "/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin" TYPE EXECUTABLE FILES "/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/uMario")
-  if(EXISTS "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario")
+file(INSTALL DESTINATION "/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin" TYPE EXECUTABLE FILES "/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/uMario")
+  if(EXISTS "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/bin/uMario")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/bin/uMario")
     endif()
   endif()
 endif()
@@ -64,5 +64,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/tianyec/Documents/6.835/final_project/jank_mario/uMario_Jakowski/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/tianyec/Documents/6.835/final_project/jank_mario/Mario_Leap/uMario_Jakowski/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
