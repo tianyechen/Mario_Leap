@@ -29,6 +29,7 @@ class SampleListener(Leap.Listener):
     is_jumping = False
     run_timer = None
     jump_timer = None
+    direction = None
     pipeName = "/tmp/testpipe"
     fifo = open(pipeName, 'w')
 
@@ -40,15 +41,18 @@ class SampleListener(Leap.Listener):
         print "wrote %s to pipe" %(value)
 
     def stop_mario(self):
-        print "stop"
+        print "stop_mario"
         self.is_running = False
-        self.write_to_pipe('s')
+        if self.direction == "right":
+            self.write_to_pipe('sd')
+        else:
+            self.write_to_pipe('sa')
 
     def stop_jump(self):
-        print "stop"
+        print "stop_jump"
         # print "pipe two ss"
         self.is_jumping = False
-        self.write_to_pipe('s')
+        self.write_to_pipe('sb')
         # self.write_to_pipe('s')
 
 
@@ -95,14 +99,14 @@ class SampleListener(Leap.Listener):
             for hand in frame.hands:
                 handType = "Left hand" if hand.is_left else "Right hand"
 
-                # print "  %s, id %d, position: %s" % (
-                #     handType, hand.id, hand.palm_position)
+                print "  %s, id %d, position: %s" % (
+                    handType, hand.id, hand.palm_position)
 
             if gesture.type == Leap.Gesture.TYPE_SWIPE:
                 if not self.is_jumping:
                     print "jump"
                     self.is_jumping = True
-                    self.jump_timer = MarioTimer(.01, self.stop_jump)
+                    self.jump_timer = MarioTimer(.1, self.stop_jump)
                     self.jump_timer.start()
                     self.write_to_pipe('b')
                 else:
@@ -119,11 +123,13 @@ class SampleListener(Leap.Listener):
                     if handType == "Right hand":
                         print "run right"
                         self.write_to_pipe('d')
+                        self.direction = "right"
                     else:
                         print "run_left"
                         self.write_to_pipe('a')
+                        self.direction = "left"
                     self.is_running = True
-                    self.run_timer = MarioTimer(.01, self.stop_mario)
+                    self.run_timer = MarioTimer(.25, self.stop_mario)
                     self.run_timer.start()
                 else:
                     self.run_timer.reset()

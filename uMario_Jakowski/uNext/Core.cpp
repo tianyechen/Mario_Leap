@@ -38,7 +38,9 @@ bool gestureDown = false;
 bool gestureUp=false;
 bool useKeys = true;
 int gestureKey;
+int gestureKeyUp;
 int keyPress;
+int keyPressUp;
 
 CCore::CCore(void) {
 	this->quitGame = false;
@@ -113,10 +115,21 @@ void CCore::mainLoop() {
             if (useKeys){
                 useKeys = false;
             }
-            printf("%s", line);
-            if (strcmp(line, "s\n")== 0){
+            // printf("%s", line);
+            if (strcmp(line, "sd\n")== 0){
                 gestureUp = true;
-                printf("recognized gesture stop\n");
+                gestureKeyUp = SDLK_d;
+                printf("recognized stop right\n");
+            }
+            else if (strcmp(line, "sb\n")== 0){
+                gestureUp = true;
+                gestureKeyUp = SDLK_SPACE;
+                printf("recognized stop jump\n");
+            }
+            else if (strcmp(line, "sa\n")== 0){
+                gestureUp = true;
+                gestureKeyUp = SDLK_a;
+                printf("recognized stop left\n");
             }
             else{
                 gestureDown = true;
@@ -149,7 +162,7 @@ void CCore::mainLoop() {
                     printf("recognized d\n");
                 }
                 else if (strcmp(line, "b\n") == 0){
-                    gestureKey = SDLK_b;
+                    gestureKey = SDLK_SPACE;
                     printf("recognized jump\n");
                 }
             }
@@ -287,22 +300,31 @@ void CCore::InputPlayer() {
 				break;
 		}
 	}
+    if (gestureUp){
+        keyPressUp = gestureKeyUp;
+        // printf("happened\n");
+    }
+    else{
+        keyPressUp = mainEvent -> key.keysym.sym;
+    }
 
-	if(mainEvent->type == SDL_KEYUP) {
-		if(mainEvent->key.keysym.sym == CCFG::keyIDD) {
+	if((mainEvent->type == SDL_KEYUP) | gestureUp) {
+        gestureUp = false;
+		if(keyPressUp == CCFG::keyIDD) {
+                printf("processed stop right\n");
+
 				if(firstDir) {
 					firstDir = false;
 				}
 
 				keyDPressed = false;
 			}
-
-			if(mainEvent->key.keysym.sym == CCFG::keyIDS) {
+			if(keyPressUp == CCFG::keyIDS) {
 				oMap->getPlayer()->setSquat(false);
 				keyS = false;
 			}
 
-			if(mainEvent->key.keysym.sym == CCFG::keyIDA) {
+			if(keyPressUp == CCFG::keyIDA) {
 				if(!firstDir) {
 					firstDir = true;
 				}
@@ -310,60 +332,70 @@ void CCore::InputPlayer() {
 				keyAPressed = false;
 			}
 
-			if(mainEvent->key.keysym.sym == CCFG::keyIDSpace) {
+			if(keyPressUp == CCFG::keyIDSpace) {
 				CCFG::keySpace = false;
+                printf("processed stop jump\n");
 			}
 
-			if(mainEvent->key.keysym.sym == CCFG::keyIDShift) {
+			if(keyPressUp == CCFG::keyIDShift) {
 				if(keyShift) {
 					oMap->getPlayer()->resetRun();
 					keyShift = false;
 				}
 			}
-		switch(mainEvent->key.keysym.sym) {
+		switch(keyPressUp) {
 			case SDLK_KP_ENTER: case SDLK_RETURN: case SDLK_ESCAPE:
 				keyMenuPressed = false;
 				break;
 		}
 	}
-
-	if(mainEvent->type == SDL_KEYDOWN) {
-		if(mainEvent->key.keysym.sym == CCFG::keyIDD) {
+    if (gestureDown){
+        keyPress = gestureKey;
+        // printf("happened\n");
+    }
+    else{
+        keyPress = mainEvent -> key.keysym.sym;
+    }
+	if((mainEvent->type == SDL_KEYDOWN) | gestureDown) {
+        gestureDown = false;
+		if(keyPress == CCFG::keyIDD) {
+            printf("processed start right\n");
 			keyDPressed = true;
 			if(!keyAPressed) {
 				firstDir = true;
 			}
 		}
 
-		if(mainEvent->key.keysym.sym == CCFG::keyIDS) {
+		if(keyPress == CCFG::keyIDS) {
 			if(!keyS) {
 				keyS = true;
 				if(!oMap->getUnderWater() && !oMap->getPlayer()->getInLevelAnimation()) oMap->getPlayer()->setSquat(true);
 			}
 		}
 
-		if(mainEvent->key.keysym.sym == CCFG::keyIDA) {
+		if(keyPress == CCFG::keyIDA) {
 			keyAPressed = true;
 			if(!keyDPressed) {
 				firstDir = false;
 			}
 		}
 
-		if(mainEvent->key.keysym.sym == CCFG::keyIDSpace) {
+		if(keyPress == CCFG::keyIDSpace) {
 			if(!CCFG::keySpace) {
+                printf("processed start jump\n");
 				oMap->getPlayer()->jump();
 				CCFG::keySpace = true;
 			}
 		}
 
-		if(mainEvent->key.keysym.sym == CCFG::keyIDShift) {
+		if(keyPress == CCFG::keyIDShift) {
 			if(!keyShift) {
 				oMap->getPlayer()->startRun();
 				keyShift = true;
 			}
 		}
 
-		switch(mainEvent->key.keysym.sym) {
+		switch(keyPress) {
 			case SDLK_KP_ENTER: case SDLK_RETURN:
 				if(!keyMenuPressed) {
 					CCFG::getMM()->enter();
