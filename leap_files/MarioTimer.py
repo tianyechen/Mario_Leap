@@ -23,7 +23,7 @@ class MarioTimer(object):
     def start(self):
         self.timer = Timer(self.interval, self.callback)
         self.timer.start()
-        print "timer started"
+        # print "timer started"
 
     def reset(self):
         # print "timer reset"

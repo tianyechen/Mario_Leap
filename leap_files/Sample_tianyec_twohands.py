@@ -19,7 +19,7 @@ import os
 import stat
 import errno
 import posix
-# import speech
+
 
 class SampleListener(Leap.Listener):
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
@@ -83,71 +83,38 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
         # Get the most recent frame and report some basic information
         frame = controller.frame()
-
-        # print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
-        #       frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
-
-        # Get hands
-        # for hand in frame.hands:
-        #
-        #     handType = "Left hand" if hand.is_left else "Right hand"
-        #
-        #     print "  %s, id %d, position: %s" % (
-        #         handType, hand.id, hand.palm_position)
-        # Get gestures
-        handType = None
+        height = None
         for hand in frame.hands:
-            handType = "Left hand" if hand.is_left else "Right hand"
-            if abs(hand.palm_velocity[1]) > 300:
-                 if not self.is_jumping:
-                     print "jump"
-                     self.is_jumping = True
-                     self.jump_timer = MarioTimer(.1, self.stop_jump)
-                     self.jump_timer.start()
-                     self.write_to_pipe('b')
-                     # print hand.palm_position[1]
-                 else:
-                     self.jump_timer.reset()
-                 if self.is_running:
-                     self.run_timer.reset()
-                     # self.write_to_pipe('b')
+            if height == None:
+                height = hand.palm_position[1]
+            else:
+                if hand.palm_position[1] < height:
+                    if hand.is_left:
+                        self.direction = "left"
+                    else:
+                        self.direction = "right"
+                else:
+                    if hand.is_left:
+                        self.direction = "left"
+                    else:
+                        self.direction = "right"
+
         for gesture in frame.gestures():
-                # print "  %s, id %d, position: %s" % (
-                #     handType, hand.id, hand.palm_position)
-
-            # if gesture.type == Leap.Gesture.TYPE_SWIPE:
-            #     if not self.is_jumping:
-            #         print "jump"
-            #         self.is_jumping = True
-            #         self.jump_timer = MarioTimer(.1, self.stop_jump)
-            #         self.jump_timer.start()
-            #         self.write_to_pipe('b')
-            #     else:
-            #         self.jump_timer.reset()
-            #     swipe = SwipeGesture(gesture)
-                # print "Swipe id: %d, direction: %s" % (
-                #         gesture.id,swipe.direction)
-                # print "Swipe id: %d, state: %s, position: %s, direction: %s, speed: %f" % (
-                #         gesture.id, self.state_names[gesture.state],
-                #         swipe.position, swipe.direction, swipe.speed)
-
             if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
                 if not self.is_running:
-                    if handType == "Right hand":
-                        print "run right"
+                    if self.direction == "right":
+                        print "run_right"
                         self.write_to_pipe('d')
-                        self.direction = "right"
                     else:
                         print "run_left"
                         self.write_to_pipe('a')
-                        self.direction = "left"
                     self.is_running = True
                     self.run_timer = MarioTimer(.25, self.stop_mario)
                     self.run_timer.start()
                 else:
                     self.run_timer.reset()
                 for hand in frame.hands:
-                    if abs(hand.palm_velocity[1]) > 300:
+                    if abs(hand.palm_position[1]) > 100:
                          if not self.is_jumping:
                              print "jump"
                              self.is_jumping = True
