@@ -29,7 +29,7 @@ for i, microphone_name in enumerate(mic_list):
 #use the microphone as source for input. Here, we also specify
 #which device ID to specifically look for incase the microphone
 #is not working, an error will pop up saying "device_id undefined"
-fire = ['fire','pew','bang']
+fire = ['fire','pew','bang', 'dang', 'puke']
 with sr.Microphone(device_index = device_id, sample_rate = sample_rate,
 						chunk_size = chunk_size) as source:
 	#wait for a second to let the recognizer adjust the
