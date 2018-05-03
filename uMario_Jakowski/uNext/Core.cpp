@@ -131,6 +131,11 @@ void CCore::mainLoop() {
                 gestureKeyUp = SDLK_a;
                 printf("recognized stop left\n");
             }
+            else if (strcmp(line, "sshift\n")==0){
+                gestureUp = true;
+                gestureKeyUp = SDLK_LSHIFT;
+                printf("recognized stop shift\n");
+            }
             else{
                 gestureDown = true;
                 if (strcmp(line, "enter\n") == 0){
@@ -164,6 +169,10 @@ void CCore::mainLoop() {
                 else if (strcmp(line, "b\n") == 0){
                     gestureKey = SDLK_SPACE;
                     printf("recognized jump\n");
+                }
+                else if (strcmp(line, "shift\n") == 0){
+                    gestureKey = SDLK_LSHIFT;
+                    printf("recognized shift\n");
                 }
             }
         }
@@ -342,6 +351,7 @@ void CCore::InputPlayer() {
 					oMap->getPlayer()->resetRun();
 					keyShift = false;
 				}
+                printf("processed stop shift\n");
 			}
 		switch(keyPressUp) {
 			case SDLK_KP_ENTER: case SDLK_RETURN: case SDLK_ESCAPE:

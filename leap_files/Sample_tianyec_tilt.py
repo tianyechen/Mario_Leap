@@ -19,7 +19,9 @@ import os
 import stat
 import errno
 import posix
-# import speech
+import alsaaudio, time, audioop
+import numpy as np
+
 
 class SampleListener(Leap.Listener):
     finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
@@ -27,18 +29,29 @@ class SampleListener(Leap.Listener):
     state_names = ['STATE_INVALID', 'STATE_START', 'STATE_UPDATE', 'STATE_END']
     is_running = False
     is_jumping = False
+    is_firing = False
     run_timer = None
     jump_timer = None
+    fire_timer = None
     direction = None
     pipeName = "/tmp/testpipe"
     fifo = open(pipeName, 'w')
-
+    # Open the device in nonblocking capture mode. The last argument could
+    # just as well have been zero for blocking mode. Then we could have
+    # left out the sleep call in the bottom of the loop
+    inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK)
+    ambient_sound_level = 0
+    sound_padding = 4
     ##value needs to be a string
     def write_to_pipe(self, value):
         self.fifo.write(value)
         self.fifo.write('\n')
         self.fifo.flush()
         # print "wrote %s to pipe" %(value)
+    def stop_fire(self):
+        print "stop_firing"
+        self.is_firing = False
+        self.write_to_pipe ('sshift')
 
     def stop_mario(self):
         print "stop_mario"
@@ -55,6 +68,25 @@ class SampleListener(Leap.Listener):
         self.write_to_pipe('sb')
         # self.write_to_pipe('s')
 
+    def get_ambient_sound(self):
+        print "measuring ambient sound"
+        samples = np.zeros(3000);
+        for i in range(3000):
+            # Read data from device
+            l,data = self.inp.read()
+            if l:
+                # Return the maximum of the absolute value of all samples in a fragment.
+                # if audioop.max(data, 2) > 100:
+                # print i, audioop.max(data, 2)
+                samples[i] = audioop.max(data,2)
+            time.sleep(.001)
+
+        # print (np.mean(samples))
+        samples[samples == 0] = np.nan
+        mean = np.nanmean(samples)
+        self.ambient_sound_level = mean + self.sound_padding*mean
+        print "ambient sound level is: ", mean
+        print "ambient sound level threshold is: ", self.ambient_sound_level
 
     def on_init(self, controller):
         print "Initialized"
@@ -62,6 +94,14 @@ class SampleListener(Leap.Listener):
             os.mkfifo(pipeName)
         except:
             pass
+        ##setup audio things
+        # Set attributes: Mono, 8000 Hz, 16 bit little endian samples
+        self.inp.setchannels(1)
+        self.inp.setrate(8000)
+        self.inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
+        self.inp.setperiodsize(160)
+        self.get_ambient_sound()
+
 
     def on_connect(self, controller):
         print "Connected"
@@ -81,6 +121,15 @@ class SampleListener(Leap.Listener):
         print "Exited"
 
     def on_frame(self, controller):
+        audio_level = 0
+        l,data = self.inp.read()
+        if l:
+            # Return the maximum of the absolute value of all samples in a fragment.
+            ## threshold around 20,000 for built in mic, 300 for headphone mic
+            if audioop.max(data, 2) > self.ambient_sound_level:
+                audio_level = audioop.max(data, 2)
+        # time.sleep(.001)
+
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
@@ -97,24 +146,22 @@ class SampleListener(Leap.Listener):
                      # print hand.palm_position[1]
                  else:
                      self.jump_timer.reset()
-                 if self.is_jumping:
-                     self.jump_timer.reset()
-                     # self.write_to_pipe('b')
             if handType == "Right hand":
                 roll = hand.palm_normal.roll * Leap.RAD_TO_DEG
+                # print roll
                 if not self.is_running:
                     if roll < -30:
                         print("run right")
                         self.write_to_pipe('d')
                         self.direction = "right"
                         self.is_running = True
-                    if roll > 30:
+                    if roll > 20:
                         print("run left")
                         self.write_to_pipe('a')
                         self.direction = "left"
                         self.is_running = True
                 else:
-                    if roll < 30 and roll > -30:
+                    if roll < 20 and roll > -30:
                         print("stop running")
                         self.is_running = False
                         if self.direction == "right":
@@ -135,6 +182,17 @@ class SampleListener(Leap.Listener):
                 else:
                     self.jump_timer.reset()
                 swipe = SwipeGesture(gesture)
+    ## sound processing
+        if audio_level > self.ambient_sound_level:
+             if not self.is_firing:
+                 print "fire"
+                 self.is_firing = True
+                 self.fire_timer = MarioTimer(.1, self.stop_fire)
+                 self.fire_timer.start()
+                 self.write_to_pipe('shift')
+             else:
+                 self.fire_timer.reset()
+            # self.write_to_pipe ('sshift')
         #     if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
         #         if not self.is_running:
         #             if handType == "Right hand":
@@ -180,6 +238,7 @@ def main():
     # Create a sample listener and controller
     listener = SampleListener()
     controller = Leap.Controller()
+    # listener.on_init(controller)
 
     # Have the sample listener receive events from the controller
     controller.add_listener(listener)

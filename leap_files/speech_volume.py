@@ -8,6 +8,7 @@
 ## To test it out, run it and shout at your microphone:
 
 import alsaaudio, time, audioop
+import numpy as np
 
 # Open the device in nonblocking capture mode. The last argument could
 # just as well have been zero for blocking mode. Then we could have
@@ -28,11 +29,20 @@ inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
 # mode.
 inp.setperiodsize(160)
 
-while True:
+samples = np.zeros(3000);
+
+for i in range(3000):
     # Read data from device
     l,data = inp.read()
     if l:
         # Return the maximum of the absolute value of all samples in a fragment.
-        if audioop.max(data, 2) > 1000:
-            print audioop.max(data, 2)
+        # if audioop.max(data, 2) > 100:
+        print i, audioop.max(data, 2)
+        samples[i] = audioop.max(data,2)
     time.sleep(.001)
+
+# print (np.mean(samples))
+samples[samples == 0] = np.nan
+means = np.nanmean(samples)
+print means
+# print samples
