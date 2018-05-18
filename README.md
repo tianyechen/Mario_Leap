@@ -1,9 +1,14 @@
 # Spring 2018 6.835 Final Project Mario IRL
 ## Table of Contents
 * uMario_Jakowski
-..* uNext
-....* core.cpp
-
+  * uNext
+    * core.cpp (file altered to allow gesture control)
+* leap_files
+  * main.py (main file to run to allow for choice of gesture set used)
+  * gesture1.py (code for gesture set 1)
+  * gesture2.py (code for gesture set 2)
+  * MarioTimer.py (custom functions for timers)
+all other files are library files or did not change for the purpose of this game
 
 ## System Requirements:
 * OS: Ubuntu 16.04
