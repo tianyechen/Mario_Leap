@@ -1,18 +1,18 @@
 # Spring 2018 6.835 Final Project Mario IRL
 
 ## System Requirements:
-OS: Ubuntu 16.04
-Python 2.7
-Leap Motion Linux SDK 2.2.3
-CMake
+* OS: Ubuntu 16.04
+* Python 2.7
+* Leap Motion Linux SDK 2.2.3
+* CMake
 
 ## Install Mario:
 Cd into the uMario_Jakowski folder
-Install the following dependencies:
+Sudo apt-get install the following dependencies:
 * cmake
-* sdl2
-* sdl2_image
-* sdl2_mixer
+* libsdl2-dev version:2.0.4+dfsg1-2ubuntu2
+* libsdl2-image-dev version:2.0.1+dfsg-2+deb9u1build0.16.04.1
+* libsdl2-mixer-dev version:2.0.4+dfsg1
 
 ## Build the game:
 if a build folder already exists delete the contents and perform the following commands
@@ -40,7 +40,7 @@ sys.path.insert(0, "PATH TO LeapSDK/lib/x64")
 ```
 Open gesture2.py and repeat the same steps
 
-Install python packages for audio processing:
+Pip install the following python packages (latest version):
 * posix
 * errno
 * stat
