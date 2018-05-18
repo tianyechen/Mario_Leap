@@ -47,7 +47,7 @@ Install python packages for audio processing:
 * alsaaudio
 * audioop
 
-## Running the game (you will need to open multiple terminals):
+## Running the game (you will need to open three terminals A, B, C):
 In terminal A start the leapmotion daemon (in ubuntu you have to manually start it)
 ```
 $ leapd
