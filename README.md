@@ -1,5 +1,6 @@
 # Spring 2018 6.835 Final Project Mario IRL
 ## Table of Contents
+Files that are not listed are provided leapmotion library and example files or files not changed in the mario game for the purpose of this project
 * uMario_Jakowski
   * uNext
     * core.cpp (file altered to allow gesture control)
@@ -8,7 +9,6 @@
   * gesture1.py (code for gesture set 1)
   * gesture2.py (code for gesture set 2)
   * MarioTimer.py (custom functions for timers)
-all other files are library files or did not change for the purpose of this game
 
 ## System Requirements:
 * OS: Ubuntu 16.04
