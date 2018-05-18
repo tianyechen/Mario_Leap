@@ -9,10 +9,10 @@ CMake
 ## Install Mario:
 Cd into the uMario_Jakowski folder
 Install the following dependencies:
-*cmake
-*sdl2
-*sdl2_image
-*sdl2_mixer
+* cmake
+* sdl2
+* sdl2_image
+* sdl2_mixer
 
 ## Build the game:
 if a build folder already exists delete the contents and perform the following commands
@@ -41,11 +41,11 @@ sys.path.insert(0, "PATH TO LeapSDK/lib/x64")
 Open gesture2.py and repeat the same steps
 
 Install python packages for audio processing:
-*posix
-*errno
-*stat
-*alsaaudio
-*audioop
+* posix
+* errno
+* stat
+* alsaaudio
+* audioop
 
 ## Running the game (you will need to open multiple terminals):
 In terminal A start the leapmotion daemon (in ubuntu you have to manually start it)
