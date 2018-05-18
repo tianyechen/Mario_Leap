@@ -1,12 +1,12 @@
-#Spring 2018 6.835 Final Project Mario IRL
+# Spring 2018 6.835 Final Project Mario IRL
 
-##System Requirements:
+## System Requirements:
 OS: Ubuntu 16.04
 Python 2.7
 Leap Motion Linux SDK 2.2.3
 CMake
 
-##Install Mario:
+## Install Mario:
 Cd into the uMario_Jakowski folder
 Install the following dependencies:
 *cmake
@@ -14,7 +14,7 @@ Install the following dependencies:
 *sdl2_image
 *sdl2_mixer
 
-##Build the game:
+## Build the game:
 if a build folder already exists delete the contents and perform the following commands
 ```
 $ mkdir build
@@ -24,14 +24,14 @@ $ make
 $ ./uMario
 ```
 
-##Test the game
+## Test the game
 (executable should be in build folder)
 ```
 $ ./uMario
 ```
 Mario window should appear
 
-##Configure Leap Motion Files:
+## Configure Leap Motion Files:
 
 Cd into leap_files
 Open gesture1.py and on line 10, change the path path to your lib/x64 folder inside the SDK you downloaded:
@@ -47,7 +47,7 @@ Install python packages for audio processing:
 *alsaaudio
 *audioop
 
-##Running the game (you will need to open multiple terminals):
+## Running the game (you will need to open multiple terminals):
 In terminal A start the leapmotion daemon (in ubuntu you have to manually start it)
 ```
 $ leapd
