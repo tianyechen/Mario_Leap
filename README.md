@@ -7,8 +7,7 @@
 * CMake
 
 ## Install Mario:
-Cd into the uMario_Jakowski folder
-Sudo apt-get install the following dependencies:
+Cd into the uMario_Jakowski folder and sudo apt-get install the following dependencies:
 * cmake
 * libsdl2-dev version:2.0.4+dfsg1-2ubuntu2
 * libsdl2-image-dev version:2.0.1+dfsg-2+deb9u1build0.16.04.1
