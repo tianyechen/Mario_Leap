@@ -65,3 +65,5 @@ $ ./uMario
 ```
 
 Hit enter twice to start the game on the first level and you should be all set to play the game using the chosen modality!
+
+**Credit to jakowskidev for the uMario platform!**
