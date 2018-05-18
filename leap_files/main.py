@@ -12,8 +12,8 @@ while mode not in choices:
 if mode == "1":
     pass
 elif mode =="2":
-	import Sample_tianyec
-        Sample_tianyec.main()
+	import gesture1
+        gesture1.main()
 else:
-	import Sample_tianyec_tilt
-        Sample_tianyec_tilt.main()
+	import gesture2
+        gesture2.main()

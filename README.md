@@ -1,8 +1,52 @@
-For Mac users, run the following commands in terminal to setup audio recognition
-```
-$ sudo pip installSpeech Recognition
-$ brew install portaudio
-$ sudo pip install pyaudio
-```
+Github Repo with same readme here
 
-inspired by https://www.geeksforgeeks.org/speech-recognition-in-python-using-google-speech-api/
+System Requirements:
+OS: Ubuntu 16.04
+Python 2.7
+Leap Motion Linux SDK 2.2.3
+CMake
+
+Install Mario:
+
+Cd into the uMario_Jakowski folder
+Install the following dependencies:
+cmake
+sdl2
+sdl2_image
+sdl2_mixer
+
+Build the game:
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ ./uMario
+
+Test the game
+(executable should be in build folder)
+$ ./uMario
+
+Configure Leap Motion Files:
+
+Cd into leap_files
+Open gesture1.pyy path to your lib/x64 folder inside your SDK :
+sys.path.insert(0, "PATH TO LeapSDK/lib/x64")
+Open gesture2.py and repeat the same steps
+
+Install python packages for audio processing:
+
+Posix, Errno, Stat, Alsaaudio, audioop
+
+
+Running the game (you will need to open multiple terminals):
+In terminal A start the leapmotion daemon (in ubuntu you have to manually start it)
+$ leapd
+
+In terminal B start the python main script
+$ python main.py
+Follow the prompts and chose which mode you’d like to play the game in
+
+In terminal C start the mario game
+$ ./uMario
+
+Hit enter twice to start the game on the first level and you should be all set to play the game using the chosen modality!
