@@ -334,11 +334,15 @@ void CCore::InputPlayer() {
 			}
 
 			if(keyPressUp == CCFG::keyIDA) {
-				if(!firstDir) {
-					firstDir = true;
-				}
+                printf("processed stop left\n");
+                if (keyAPressed == true) {
+    				if(!firstDir) {
+    					firstDir = true;
+    				}
 
-				keyAPressed = false;
+    				keyAPressed = false;
+                }
+
 			}
 
 			if(keyPressUp == CCFG::keyIDSpace) {
@@ -347,11 +351,11 @@ void CCore::InputPlayer() {
 			}
 
 			if(keyPressUp == CCFG::keyIDShift) {
+                printf("processed stop shift\n");
 				if(keyShift) {
 					oMap->getPlayer()->resetRun();
 					keyShift = false;
 				}
-                printf("processed stop shift\n");
 			}
 		switch(keyPressUp) {
 			case SDLK_KP_ENTER: case SDLK_RETURN: case SDLK_ESCAPE:
@@ -384,10 +388,13 @@ void CCore::InputPlayer() {
 		}
 
 		if(keyPress == CCFG::keyIDA) {
-			keyAPressed = true;
-			if(!keyDPressed) {
-				firstDir = false;
-			}
+            if (!keyAPressed){
+                printf("processed start left\n");
+    			keyAPressed = true;
+    			if(!keyDPressed) {
+    				firstDir = false;
+    			}
+            }
 		}
 
 		if(keyPress == CCFG::keyIDSpace) {

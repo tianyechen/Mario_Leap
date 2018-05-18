@@ -27,8 +27,10 @@ class SampleListener(Leap.Listener):
     state_names = ['STATE_INVALID', 'STATE_START', 'STATE_UPDATE', 'STATE_END']
     is_running = False
     is_jumping = False
+    is_firing = False
     run_timer = None
     jump_timer = None
+    fire_timer = False
     direction = None
     pipeName = "/tmp/testpipe"
     fifo = open(pipeName, 'w')
@@ -55,6 +57,12 @@ class SampleListener(Leap.Listener):
         self.write_to_pipe('sb')
         # self.write_to_pipe('s')
 
+    def stop_fire(self):
+        print "stop_fire"
+        # print "pipe two ss"
+        self.is_firing = False
+        self.write_to_pipe('sshift')
+        # self.write_to_pipe('s')
 
     def on_init(self, controller):
         print "Initialized"
@@ -69,7 +77,7 @@ class SampleListener(Leap.Listener):
         # Enable gestures
         # controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
         controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
-        # controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP);
+        controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP);
         controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
 
     def on_disconnect(self, controller):
@@ -110,12 +118,13 @@ class SampleListener(Leap.Listener):
                      self.jump_timer.reset()
                  if self.is_running:
                      self.run_timer.reset()
-                     # self.write_to_pipe('b')
+                     self.write_to_pipe('b')
         for gesture in frame.gestures():
                 # print "  %s, id %d, position: %s" % (
                 #     handType, hand.id, hand.palm_position)
 
             # if gesture.type == Leap.Gesture.TYPE_SWIPE:
+                # print "swipe"
             #     if not self.is_jumping:
             #         print "jump"
             #         self.is_jumping = True
@@ -157,8 +166,18 @@ class SampleListener(Leap.Listener):
                              # self.write_to_pipe('d')
                          else:
                              self.jump_timer.reset()
-                             # self.write_to_pipe('b')
-                keytap = KeyTapGesture(gesture)
+                             self.write_to_pipe('b')
+            elif gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
+                print "got screentap"
+                if not self.is_firing:
+                    print "fire"
+                    self.is_firing = True
+                    self.fire_timer = MarioTimer(.1, self.stop_fire)
+                    self.fire_timer.start()
+                    self.write_to_pipe('shift')
+                    # print hand.palm_position[1]
+                else:
+                    self.fire_timer.reset()
                 # print "Hand Type: %s, Key Tap id: %d" % (
                 #         handType, gesture.id)
 
@@ -208,4 +227,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print "sample_tianyec is running"
     main()

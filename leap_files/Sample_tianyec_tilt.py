@@ -41,7 +41,7 @@ class SampleListener(Leap.Listener):
     # left out the sleep call in the bottom of the loop
     inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK)
     ambient_sound_level = 0
-    sound_padding = 4
+    sound_padding = 3
     ##value needs to be a string
     def write_to_pipe(self, value):
         self.fifo.write(value)
@@ -136,7 +136,7 @@ class SampleListener(Leap.Listener):
         handType = None
         for hand in frame.hands:
             handType = "Left hand" if hand.is_left else "Right hand"
-            if abs(hand.palm_velocity[1]) > 300:
+            if abs(hand.palm_velocity[1]) > 250:
                  if not self.is_jumping:
                      print "jump"
                      self.is_jumping = True
@@ -150,24 +150,25 @@ class SampleListener(Leap.Listener):
                 roll = hand.palm_normal.roll * Leap.RAD_TO_DEG
                 # print roll
                 if not self.is_running:
-                    if roll < -30:
+                    if roll < -40:
                         print("run right")
                         self.write_to_pipe('d')
                         self.direction = "right"
                         self.is_running = True
-                    if roll > 20:
+                    if roll > 15:
                         print("run left")
                         self.write_to_pipe('a')
                         self.direction = "left"
                         self.is_running = True
                 else:
-                    if roll < 20 and roll > -30:
-                        print("stop running")
+                    if roll < 15 and roll > -40:
                         self.is_running = False
                         if self.direction == "right":
                             self.write_to_pipe('sd')
+                            print "stop running right"
                         else:
                             self.write_to_pipe('sa')
+                            print "stop running left"
 
                 # print hand.palm_normal.roll * Leap.RAD_TO_DEG
 

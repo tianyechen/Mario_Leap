@@ -6,7 +6,10 @@
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
 
-import Leap, sys, thread, time
+import sys
+sys.path.insert(0, "/home/tianyec/Documents/6.835/final_project/jank_mario/leap/LeapSDK/lib/x64")
+
+import Leap, thread, time
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
 
@@ -38,59 +41,59 @@ class SampleListener(Leap.Listener):
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
-        print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
-              frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
+        # print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
+        #       frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
 
         # Get hands
-        for hand in frame.hands:
-
-            handType = "Left hand" if hand.is_left else "Right hand"
-
-            print "  %s, id %d, position: %s" % (
-                handType, hand.id, hand.palm_position)
-
-            # Get the hand's normal vector and direction
-            normal = hand.palm_normal
-            direction = hand.direction
-
-            # Calculate the hand's pitch, roll, and yaw angles
-            print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
-                direction.pitch * Leap.RAD_TO_DEG,
-                normal.roll * Leap.RAD_TO_DEG,
-                direction.yaw * Leap.RAD_TO_DEG)
-
-            # Get arm bone
-            arm = hand.arm
-            print "  Arm direction: %s, wrist position: %s, elbow position: %s" % (
-                arm.direction,
-                arm.wrist_position,
-                arm.elbow_position)
-
-            # Get fingers
-            for finger in hand.fingers:
-
-                print "    %s finger, id: %d, length: %fmm, width: %fmm" % (
-                    self.finger_names[finger.type],
-                    finger.id,
-                    finger.length,
-                    finger.width)
-
-                # Get bones
-                for b in range(0, 4):
-                    bone = finger.bone(b)
-                    print "      Bone: %s, start: %s, end: %s, direction: %s" % (
-                        self.bone_names[bone.type],
-                        bone.prev_joint,
-                        bone.next_joint,
-                        bone.direction)
-
-        # Get tools
-        for tool in frame.tools:
-
-            print "  Tool id: %d, position: %s, direction: %s" % (
-                tool.id, tool.tip_position, tool.direction)
-
-        # Get gestures
+        # for hand in frame.hands:
+        #
+        #     handType = "Left hand" if hand.is_left else "Right hand"
+        #
+        #     print "  %s, id %d, position: %s" % (
+        #         handType, hand.id, hand.palm_position)
+        #
+        #     # Get the hand's normal vector and direction
+        #     normal = hand.palm_normal
+        #     direction = hand.direction
+        #
+        #     # Calculate the hand's pitch, roll, and yaw angles
+        #     print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
+        #         direction.pitch * Leap.RAD_TO_DEG,
+        #         normal.roll * Leap.RAD_TO_DEG,
+        #         direction.yaw * Leap.RAD_TO_DEG)
+        #
+        #     # Get arm bone
+        #     arm = hand.arm
+        #     print "  Arm direction: %s, wrist position: %s, elbow position: %s" % (
+        #         arm.direction,
+        #         arm.wrist_position,
+        #         arm.elbow_position)
+        #
+        #     # Get fingers
+        #     for finger in hand.fingers:
+        #
+        #         print "    %s finger, id: %d, length: %fmm, width: %fmm" % (
+        #             self.finger_names[finger.type],
+        #             finger.id,
+        #             finger.length,
+        #             finger.width)
+        #
+        #         # Get bones
+        #         for b in range(0, 4):
+        #             bone = finger.bone(b)
+        #             print "      Bone: %s, start: %s, end: %s, direction: %s" % (
+        #                 self.bone_names[bone.type],
+        #                 bone.prev_joint,
+        #                 bone.next_joint,
+        #                 bone.direction)
+        #
+        # # Get tools
+        # for tool in frame.tools:
+        #
+        #     print "  Tool id: %d, position: %s, direction: %s" % (
+        #         tool.id, tool.tip_position, tool.direction)
+        #
+        # # Get gestures
         for gesture in frame.gestures():
             if gesture.type == Leap.Gesture.TYPE_CIRCLE:
                 circle = CircleGesture(gesture)
