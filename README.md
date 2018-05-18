@@ -1,7 +1,7 @@
 # Spring 2018 6.835 Final Project Mario IRL
 ## Table of Contents
 * uMario_Jakowski
-.. * uNext
+..* uNext
 ....* core.cpp
 
 
